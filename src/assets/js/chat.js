@@ -1,5 +1,5 @@
 //* SCSS
-import '../sass/app.scss';
+import '../sass/chat.scss';
 
 class Chat {
     constructor() {

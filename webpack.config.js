@@ -7,7 +7,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry:
     {
-        app: ['@babel/polyfill', './src/assets/js/app.js'],
+        chat: ['@babel/polyfill', './src/assets/js/chat.js'],
     },
     output: {
         path: path.resolve(__dirname, './dist'),
@@ -23,7 +23,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: './src/index.html',
-            chunks: ['app']
+            chunks: ['chat']
         }),
         new MiniCssExtractPlugin({
             filename: "assets/css/[name].css"
