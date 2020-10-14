@@ -1,0 +1,52 @@
+.chat {
+    position: fixed;
+    right: 32px;
+    bottom: 0;
+    width: 240px;
+    border: 1px solid black;
+    border-bottom-width: 0;
+
+    &__header {
+        background: rgb(13, 58, 204);
+        cursor: pointer;
+    }
+    &__header-label {
+        display: inline-block;
+        color: #fff;
+        padding: 8px 8px 6px;
+        font-size: 14px;
+    }
+    &__content {
+        height: 0;
+        display: flex;
+        flex-direction: column;
+        transition: .25s;
+
+        &--opened {
+            height: 270px;
+        }
+    }
+    &__chat-window {
+        flex: 1;
+        max-height: calc(270px - 32px);
+        overflow-y: scroll;
+        
+        display: flex;
+        flex-direction: column;
+    }
+    &__message {
+        width: 80%;
+        background: red;
+
+        &--left {
+
+        }
+        &--right {
+            align-self: flex-end;
+        }
+    }
+    &__footer {
+        height: 32px;
+        background: red;
+    }
+}
