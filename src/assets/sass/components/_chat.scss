@@ -30,20 +30,34 @@
         flex: 1;
         max-height: calc(270px - 32px);
         overflow-y: scroll;
+        padding: 0 4px 8px 4px;
         
         display: flex;
         flex-direction: column;
     }
     &__message {
         width: 80%;
-        background: red;
+        display: flex;
+        flex-direction: column;
+        margin-top: 8px;
 
         &--left {
-
+            align-items: flex-start;
         }
         &--right {
+            align-items: flex-end;
             align-self: flex-end;
         }
+    }
+    &__message-time {
+        font-size: 10px;
+        margin-bottom: 2px;
+    }
+    &__message-txt {
+        font-size: 14px;
+        padding: 4px;
+        border: 1px solid #858585;
+        border-radius: 3px;
     }
     &__footer {
         height: 32px;
