@@ -7,7 +7,7 @@ class Chat {
     constructor() {
         this.state = {
             apiUrls: {
-                messages: 'https://localhost/api/messages/'
+                messages: 'https://localhost/api/messages/?hash'
             },
             intervals: {},
         };
