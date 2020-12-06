@@ -1,2 +1,0 @@
-# Chatty
-Chat widget app
