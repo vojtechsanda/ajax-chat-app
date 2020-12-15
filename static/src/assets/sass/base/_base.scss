@@ -13,8 +13,8 @@ html {
 
 body {
     min-height: 100%;
-    background: #2A2A2A;
-    color: #f3f3f3;
+    background: $color__main--dark;
+    color: $color__gray--light-1;
 
     height: max-content;
     min-height: 100%;
