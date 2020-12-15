@@ -5,21 +5,45 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Dummy page | Chatty</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <!-- <form class="registration js-registration-form">
-            <label for="registration-email">E-mail</label>
-            <input type="email" name="email" placeholder="john.doe@example.com" id="registration-email" required>
-            <label for="registration-password">Password</label>
-            <input type="password" name="password" placeholder="******" id="registration-password" required>
-            <input type="submit" value="Register" autofocus>
-        </form>
-        <form class="user-authentication js-user-authentication-form">
-            <label for="user-authentication-email">E-mail</label>
-            <input type="email" name="email" placeholder="john.doe@example.com" id="user-authentication-email" required>
-            <label for="user-authentication-password">Password</label>
-            <input type="password" name="password" placeholder="******" id="user-authentication-password" required>
-            <input type="submit" value="Authenticate" autofocus>
-        </form> -->
+        <main>
+            <form method="POST" action='#' class="dash js-registration-form">
+                <h2 class="dash__heading">Register</h2>
+                <div class="dash__content-wrapper">
+                    <div class="dash__input-wrapper">
+                        <label class="dash__input-label" for="registration-email">E-mail</label>
+                        <input type="email" name="email" placeholder="john.doe@example.com" id="registration-email" class="dash__input" autocomplete="off" required>
+                    </div>
+                    <div class="dash__input-wrapper">
+                        <label class="dash__input-label" for="registration-password">Password</label>
+                        <input type="password" name="password" placeholder="••••••••" id="registration-password" class="dash__input" required>
+                    </div>
+                    <div class="dash__input-wrapper">
+                        <input type="submit" value="Register" class="dash__input dash__input--submit">
+                    </div>
+                </div>
+                <p class="dash__additional-note">Already have an account?<br><a href="#" class="dash__link">Login here</a></p>
+            </form>
+            <form method="POST" action='#' class="dash js-user-authentication-form">
+                <h2 class="dash__heading">Login</h2>
+                <div class="dash__content-wrapper">
+                    <div class="dash__input-wrapper">
+                        <label class="dash__input-label" for="user-authentication-email">E-mail</label>
+                        <input type="email" name="email" placeholder="john.doe@example.com" id="user-authentication-email" class="dash__input" autocomplete="off" required>
+                    </div>
+                    <div class="dash__input-wrapper">
+                        <label class="dash__input-label" for="user-authentication-password">Password</label>
+                        <input type="password" name="password" placeholder="••••••••" id="user-authentication-password" class="dash__input" required>
+                    </div>
+                    <div class="dash__input-wrapper">
+                        <input type="submit" value="Authenticate" class="dash__input dash__input--submit">
+                    </div>
+                </div>
+                <p class="dash__additional-note">Don't have an account?<br><a href="#" class="dash__link">Register here</a></p>
+            </form>
+        </main>
     </body>
 </html>
