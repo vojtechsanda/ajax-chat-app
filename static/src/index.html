@@ -10,7 +10,37 @@
     </head>
     <body>
         <main class="js-main">
-            
+            <div class="dash dash--smaller">
+                <h2 class="dash__heading">Chat</h2>
+                <div class="dash__content-wrapper">
+                    
+                    <div class="chat__wrapper">
+                        <div class="chat__message">
+                            <span class="chat__message-txt">Haha this is someting very interesting based on my work.</span>
+                        </div>
+                        <div class="chat__message chat__message--my">
+                            <span class="chat__message-txt">That doesn't look as bad as I thought it will be.</span>
+                        </div>
+                        <div class="chat__message chat__message--my">
+                            <span class="chat__message-txt">Nope.</span>
+                        </div>
+                        <div class="chat__message">
+                            <span class="chat__message-txt">What do you mean by Nope, am I joke to you?</span>
+                        </div>
+                        <div class="chat__message chat__message--my">
+                            <span class="chat__message-txt">Nope. It's just a better way of expressing my feelings.</span>
+                        </div>
+                        <div class="chat__message chat__message--my">
+                            <span class="chat__message-txt">I could also use emojis if you want.</span>
+                        </div>
+                    </div>
+                    <form class="chat__send js-send-message-form" method="POST" action="#">
+                        <input type="text" class="chat__send-input" placeholder="Type here...">
+                        <button class="chat__send-btn"><svg class="chat__send-icon"><use href="/assets/imgs/sprite.svg#icon-send"></use></svg></button>
+                    </form>
+
+                </div>
+            </div>
         </main>
     </body>
 </html>
