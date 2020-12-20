@@ -1,12 +1,14 @@
 import { elements } from './views/base';
 import Api from './Api';
 import Notify from './Notify';
+import Redirector from './Redirector'
 
 const api = new Api('https://localhost');
 
 export default class Registration {
     constructor() {
         this.elements = {};
+        this.utilities = {};
     }
     render(showDash = false) {
         const markup = `
@@ -25,7 +27,7 @@ export default class Registration {
                     <input type="submit" value="Register" class="dash__input dash__input--submit">
                 </div>
             </div>
-            <p class="dash__additional-note">Already have an account?<br><a href="#" class="dash__link">Login here</a></p>
+            <p class="dash__additional-note">Already have an account?<br><a href="?login" class="dash__link">Login here</a></p>
         </form>
         `;
 
@@ -33,6 +35,7 @@ export default class Registration {
     }
     setupElements() {
         this.elements.registrationForm = document.querySelector('.js-registration-form');
+        this.elements.inputs = Array.from(this.elements.registrationForm.querySelectorAll('input:not([type="submit"])'));
     }
     setupEvents() {
         this.elements.registrationForm.addEventListener('submit', async (e) => {
@@ -43,7 +46,9 @@ export default class Registration {
             let resp = await api.register(formData);
 
             if (resp.status === 'success') {
-                new Notify('success', 'Registration', 'You are successfully registered.');
+                this.clearInputs();
+                this.utilities.redirector.toLogin();
+                // new Notify('success', 'Registration', 'You are successfully registered.');
             } else {
                 new Notify('error', 'Registration', 'Ups, something went wrong.');
             }
@@ -58,8 +63,13 @@ export default class Registration {
     hide() {
         this.elements.registrationForm.classList.add('dash--hidden');
     }
-    init() {
-        this.render();
+    clearInputs() {
+        this.elements.inputs.forEach(input => input.value = '');
+    }
+    init(show = false) {
+        this.utilities.redirector = new Redirector;
+
+        this.render(show);
         this.setupElements();
         this.setupEvents();
     }

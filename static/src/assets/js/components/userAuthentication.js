@@ -1,12 +1,14 @@
 import { elements } from './views/base';
 import Api from './Api';
 import Notify from './Notify';
+import Redirector from './Redirector'
 
 const api = new Api('https://localhost');
 
 export default class Registration {
     constructor() {
         this.elements = {};
+        this.utilities = {};
     }
     render(showDash = false) {
         const markup = `
@@ -25,7 +27,7 @@ export default class Registration {
                     <input type="submit" value="Authenticate" class="dash__input dash__input--submit">
                 </div>
             </div>
-            <p class="dash__additional-note">Don't have an account?<br><a href="#" class="dash__link">Register here</a></p>
+            <p class="dash__additional-note">Don't have an account?<br><a href="?registration" class="dash__link">Register here</a></p>
         </form>
         `;
 
@@ -43,8 +45,9 @@ export default class Registration {
             let resp = await api.authenticateUser(formData);
 
             if (resp.status === 'success') {
-                new Notify('success', 'User authentication', 'You are successfully authenticated.');
-                console.log(resp);
+                // new Notify('success', 'User authentication', 'You are successfully authenticated.');
+                localStorage.setItem('token', resp.data.token);
+                this.utilities.redirector.toChat();
             } else {
                 new Notify('error', 'User authentication', 'Ups, something went wrong.');
             }
@@ -59,8 +62,9 @@ export default class Registration {
     hide() {
         this.elements.userAuthenticationForm.classList.add('dash--hidden');
     }
-    init() {
-        this.render();
+    init(show = false) {
+        this.utilities.redirector = new Redirector;
+        this.render(show);
         this.setupElements();
         this.setupEvents();
     }
