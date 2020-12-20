@@ -8,6 +8,10 @@
     width: 100%;
     max-width: 40rem;
 
+    &--smaller {
+        padding: 4rem 3rem;
+        max-width: 39rem;
+    }
     &--hidden {
         display: none;
     }
@@ -58,7 +62,6 @@
             &:active {
                 box-shadow: inset -2px -2px 6px rgba(255, 255, 255, 0.2), inset 2px 2px 6px rgba(0, 0, 0, 0.8);
                 color: darken($color__green--light, 12.5);
-                margin-top: 20px;
             }
         }
     }
