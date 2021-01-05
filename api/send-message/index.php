@@ -10,7 +10,7 @@
     if (HTTP_METHOD === 'POST') {
         if (isset($_POST['token']) && isset($_POST['message'])) {
             $api = new Api;
-            $resp = $api->send->message($_POST['token'], $_POST['message']);
+            $resp = $api->send_message($_POST['token'], $_POST['message']);
 
             if ($resp->status === 'success') {
                 echo json_encode($resp->data);
