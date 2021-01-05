@@ -10,6 +10,12 @@ class Api {
     public function __construct() {
         $this->db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
     }
+    public function send_message($token, $message) {
+        $token = __html($token);
+        $message = __html($message);
+
+        
+    }
     public function register($email, $password) {
         $email = __html($email);
         $password = __html($password);
