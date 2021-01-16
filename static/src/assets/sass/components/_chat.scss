@@ -26,6 +26,11 @@
             align-self: flex-end;
         }
     }
+    &__message-header {
+        display: none;
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
     &__message-txt {
         font-size: 1.4rem;
     }

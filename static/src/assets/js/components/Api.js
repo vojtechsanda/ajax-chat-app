@@ -18,6 +18,12 @@ export default class Api {
                     method: 'POST',
                     path: '/api/user-authentication/',
                     requiredFields: ['email', 'password']
+                },
+                sendMessage: {
+                    name: 'sendMessage',
+                    method: 'POST',
+                    path: '/api/send-message/',
+                    requiredFields: ['message', 'token']
                 }
             }
         }
@@ -57,6 +63,11 @@ export default class Api {
     }
     async authenticateUser(formData) {
         const status = await this.request('userAuthentication', formData);
+        return status;
+    }
+    async sendMessage(formData, token) {
+        formData.append('token', token);
+        const status = await this.request('sendMessage', formData);
         return status;
     }
 }
