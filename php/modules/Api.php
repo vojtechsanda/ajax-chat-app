@@ -16,7 +16,7 @@ class Api {
 
         $advanced_tokens = $this->db->select('SELECT * FROM `authentication_tokens` WHERE `token` = ?', true, [$token]);
 
-        if (count($advanced_tokens) === 0) {
+        if (!verifyToken($token)) {
             return (object) [
                 "status" => "error",
                 "statusCode" => 401,
@@ -144,5 +144,14 @@ class Api {
         $token = substr(str_shuffle($token), 0, $length);
 
         return $token;
+    }
+    private function verifyToken($token) {
+        $advanced_tokens = $this->db->select('SELECT * FROM `authentication_tokens` WHERE `token` = ?', true, [$token]);
+
+        if (count($advanced_tokens) === 0) {
+            return false;
+        }
+
+        return $advanced_tokens[0];
     }
 }
