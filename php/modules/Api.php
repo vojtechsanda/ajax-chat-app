@@ -10,8 +10,9 @@ class Api {
     public function __construct() {
         $this->db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
     }
-    public function get_messages($token) {
+    public function get_messages($token, $last_verified_id) {
         $token = __html($token);
+        $last_verified_id = __html($last_verified_id);
 
         $advanced_token = $this->verifyToken($token);
 
@@ -23,8 +24,12 @@ class Api {
             ];
         }
 
-        $result = $this->db->select('SELECT * FROM `messages` ORDER BY `id` DESC LIMIT 10');
-        $result = array_reverse($result);
+        if ($last_verified_id > -1) {
+            $result = $this->db->select('SELECT * FROM `messages` WHERE `id` > ?', true, [$last_verified_id]);
+        } else {
+            $result = $this->db->select('SELECT * FROM `messages` ORDER BY `id` DESC LIMIT 10');
+            $result = array_reverse($result);
+        }
 
         return (object) [
             "status" => "success",

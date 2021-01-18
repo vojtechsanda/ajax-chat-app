@@ -10,7 +10,14 @@
     if (HTTP_METHOD === 'GET') {
         if (isset($_GET['token'])) {
             $api = new Api;
-            $resp = $api->get_messages($_GET['token']);
+            
+            if (isset($_GET['last_verified_id']) && is_numeric($_GET['last_verified_id'])) {
+                $last_verified_id = $_GET['last_verified_id'];
+            } else {
+                $last_verified_id = -1;
+            }
+            
+            $resp = $api->get_messages($_GET['token'], $last_verified_id);
 
             if ($resp->status === 'success') {
                 echo json_encode($resp->data);
