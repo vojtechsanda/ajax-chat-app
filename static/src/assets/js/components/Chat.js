@@ -9,15 +9,19 @@ export default class Chat {
     constructor() {
         this.elements = {};
         this.utilities = {};
+        this.intervals = {};
+        this.messages = {};
+        this.lastVerifiedMessageId = -1;
+        this.messages = [];
     }
     render(showDash = false) {
         const markup = `
-        <div class="dash dash--smaller js-chat-container">
+        <div class="dash dash--smaller${!showDash ? ' dash--hidden' : ''} js-chat-container">
             <h2 class="dash__heading">Chat</h2>
             <div class="dash__content-wrapper">
                 
                 <div class="chat__wrapper js-chat__wrapper">
-                    <div class="chat__message">
+                    <!--<div class="chat__message">
                         <span class="chat__message-header">Viktor | 23:01:58 16.01.2021</span>
                         <span class="chat__message-txt">Haha this is someting very interesting based on my work.</span>
                     </div>
@@ -40,7 +44,7 @@ export default class Chat {
                     <div class="chat__message chat__message--my">
                         <span class="chat__message-header">Vojtěch | 23:10:32 16.01.2021</span>
                         <span class="chat__message-txt">I could also use emojis if you want.</span>
-                    </div>
+                    </div>-->
                 </div>
                 <form class="chat__send js-send-message-form" method="POST" action="#">
                     <input type="text" name="message" class="chat__send-input js-chat__send-input" placeholder="Type here..." autocomplete="off">
@@ -65,6 +69,9 @@ export default class Chat {
             this.sendMessage(e.target);
         })
     }
+    setupIntervals() {
+        this.intervals.newMessages = setInterval(this.handleNewMessages.bind(this), 1000);
+    }
     async sendMessage(form) {
         const formData = new FormData(form);
         const token = localStorage.getItem('token');
@@ -85,7 +92,7 @@ export default class Chat {
         const messageDateTxt = `${messageDate.getDate()}.${messageDate.getMonth() + 1}.${messageDate.getFullYear()}`;
 
         const markup = `
-        <div class="chat__message chat__message--my" data-message-id="${message.id}">
+        <div class="chat__message chat__message--my js-chat__message" data-message-id="${message.id}">
             <span class="chat__message-header">User ${message.user_id} | ${messageTimeTxt} ${messageDateTxt}</span>
             <span class="chat__message-txt">${message.message}</span>
         </div>
@@ -108,13 +115,49 @@ export default class Chat {
     clearInput() {
         this.elements.messageInput.value = '';
     }
-    init(show = false) {
+    reRenderMessages(from = 0) {
+        const messageElems = Array.from(this.elements.chatWrapper.querySelectorAll('.js-chat__message'));
+
+        messageElems.slice(from).forEach(elem => elem.parentElement.removeChild(elem));
+        this.messages.slice(from).forEach(message => this.addMessage(message));
+    }
+    async handleNewMessages() {
+        const token = localStorage.getItem('token');
+
+        const resp = await api.getMessages(token, this.lastVerifiedMessageId);
+        
+        if (resp.status === 'success') {
+            if (resp.data.length > 0) {
+                const lastVerifiedIndex = this.messages.findIndex(message => message.id === this.lastVerifiedMessageId);
+                const newVerifiedMessageId = resp.data[resp.data.length - 1].id;
+    
+                if (this.lastVerifiedMessageId !== newVerifiedMessageId) {
+                    if (lastVerifiedIndex === -1) {
+                        this.messages = resp.data;
+                    } else {
+                        this.messages.splice(lastVerifiedIndex + 1, this.messages.length - (lastVerifiedIndex + 1), ...resp.data)
+                    }
+    
+                    this.reRenderMessages(lastVerifiedIndex === -1 ? 0 : lastVerifiedIndex);
+                    this.scrollChatDown();
+    
+                    this.lastVerifiedMessageId = newVerifiedMessageId;
+                }
+            }
+        } else {
+            new Notify('error', 'Downloading messages', 'Ups, something went wrong.');
+        }
+    }
+    async init(show = false) {
         this.utilities.redirector = new Redirector;
 
+        
         this.render(show);
         this.setupElements();
         this.setupEvents();
-
+        this.setupIntervals();
+        
+        await this.handleNewMessages();
         this.scrollChatDown();
     }
 }
