@@ -10,6 +10,28 @@ class Api {
     public function __construct() {
         $this->db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
     }
+    public function get_messages($token) {
+        $token = __html($token);
+
+        $advanced_token = $this->verifyToken($token);
+
+        if (!$advanced_token) {
+            return (object) [
+                "status" => "error",
+                "statusCode" => 401,
+                "message" => "Invalid token"
+            ];
+        }
+
+        $result = $this->db->select('SELECT * FROM `messages` ORDER BY `id` DESC LIMIT 10');
+        $result = array_reverse($result);
+
+        return (object) [
+            "status" => "success",
+            "message" => "User was created",
+            "data" => $result
+        ];
+    }
     public function send_message($token, $message) {
         $token = __html($token);
         $message = __html($message);
