@@ -14,9 +14,9 @@ class Api {
         $token = __html($token);
         $message = __html($message);
 
-        $advanced_tokens = $this->db->select('SELECT * FROM `authentication_tokens` WHERE `token` = ?', true, [$token]);
+        $advanced_token = $this->verifyToken($token);
 
-        if (!verifyToken($token)) {
+        if (!$advanced_token) {
             return (object) [
                 "status" => "error",
                 "statusCode" => 401,
@@ -24,9 +24,7 @@ class Api {
             ];
         }
 
-        $advanced_token = $advanced_tokens[0];
         $current_timestamp = time();
-
         $result = $this->db->insert('INSERT INTO `messages` (`user_id`, `message`, `timestamp`) VALUES (?, ?, ?)', true, [$advanced_token->user_id, $message, $current_timestamp]);
 
         if (!$result) {
