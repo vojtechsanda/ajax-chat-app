@@ -16,7 +16,7 @@ export default class Chat {
             <h2 class="dash__heading">Chat</h2>
             <div class="dash__content-wrapper">
                 
-                <div class="chat__wrapper">
+                <div class="chat__wrapper js-chat__wrapper">
                     <div class="chat__message">
                         <span class="chat__message-header">Viktor | 23:01:58 16.01.2021</span>
                         <span class="chat__message-txt">Haha this is someting very interesting based on my work.</span>
@@ -54,34 +54,56 @@ export default class Chat {
         elements.mainWrapper.insertAdjacentHTML('beforeend', markup);
     }
     setupElements() {
-        this.elements.chatWrapper = document.querySelector('.js-chat-container');
-        this.elements.messageInput = this.elements.chatWrapper.querySelector('.js-chat__send-input');
+        this.elements.chatContainer = document.querySelector('.js-chat-container');
+        this.elements.messageInput = this.elements.chatContainer.querySelector('.js-chat__send-input');
+        this.elements.chatWrapper = this.elements.chatContainer.querySelector('.js-chat__wrapper');
     }
     setupEvents() {
-        this.elements.chatWrapper.addEventListener('submit', async (e) => {
+        this.elements.chatContainer.addEventListener('submit', e => {
             e.preventDefault();
 
-            const formData = new FormData(e.target);
-            const token = localStorage.getItem('token');
-
-            let resp = await api.sendMessage(formData, token);
-
-            if (resp.status === 'success') {
-                this.clearInput();
-                new Notify('success', 'Message sending', 'Message was sent.');
-            } else {
-                new Notify('error', 'Message sending', 'Ups, something went wrong.');
-            }
+            this.sendMessage(e.target);
         })
     }
+    async sendMessage(form) {
+        const formData = new FormData(form);
+        const token = localStorage.getItem('token');
+
+        let resp = await api.sendMessage(formData, token);
+
+        if (resp.status === 'success') {
+            this.clearInput();
+            this.addMessage(resp.data);
+            this.scrollChatDown();
+        } else {
+            new Notify('error', 'Message sending', 'Ups, something went wrong.');
+        }
+    }
+    addMessage(message) {
+        const messageDate = new Date(message.timestamp);
+        const messageTimeTxt = `${formatNumber2Digits(messageDate.getHours())}:${formatNumber2Digits(messageDate.getMinutes())}:${formatNumber2Digits(messageDate.getSeconds())}`;
+        const messageDateTxt = `${messageDate.getDate()}.${messageDate.getMonth() + 1}.${messageDate.getFullYear()}`;
+
+        const markup = `
+        <div class="chat__message chat__message--my" data-message-id="${message.id}">
+            <span class="chat__message-header">User ${message.user_id} | ${messageTimeTxt} ${messageDateTxt}</span>
+            <span class="chat__message-txt">${message.message}</span>
+        </div>
+        `;
+
+        this.elements.chatWrapper.insertAdjacentHTML('beforeend', markup);
+    }
+    scrollChatDown() {
+        this.elements.chatWrapper.scrollTo(0, this.elements.chatWrapper.scrollHeight);
+    }
     toggle() {
-        this.elements.chatWrapper.classList.toggle('dash--hidden');
+        this.elements.chatContainer.classList.toggle('dash--hidden');
     }
     show() {
-        this.elements.chatWrapper.classList.remove('dash--hidden');
+        this.elements.chatContainer.classList.remove('dash--hidden');
     }
     hide() {
-        this.elements.chatWrapper.classList.add('dash--hidden');
+        this.elements.chatContainer.classList.add('dash--hidden');
     }
     clearInput() {
         this.elements.messageInput.value = '';
@@ -92,5 +114,15 @@ export default class Chat {
         this.render(show);
         this.setupElements();
         this.setupEvents();
+
+        this.scrollChatDown();
     }
+}
+
+function formatNumber2Digits(num) {
+    if (num >= 10) {
+        return `${num}`;
+    }
+
+    return `0${num}`;
 }
