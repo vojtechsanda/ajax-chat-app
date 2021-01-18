@@ -11,19 +11,29 @@ export default class Api {
                     name: 'registration',
                     method: 'POST',
                     path: '/api/registration/',
-                    requiredFields: ['email', 'password']
+                    requiredFields: ['email', 'password'],
+                    optionalFields: []
                 },
                 userAuthentication: {
                     name: 'userAuthentication',
                     method: 'POST',
                     path: '/api/user-authentication/',
-                    requiredFields: ['email', 'password']
+                    requiredFields: ['email', 'password'],
+                    optionalFields: []
                 },
                 sendMessage: {
                     name: 'sendMessage',
                     method: 'POST',
                     path: '/api/send-message/',
-                    requiredFields: ['message', 'token']
+                    requiredFields: ['message', 'token'],
+                    optionalFields: []
+                },
+                getMessages: {
+                    name: 'getMessages',
+                    method: 'GET',
+                    path: '/api/messages/',
+                    requiredFields: ['token'],
+                    optionalFields: ['last_verified_id']
                 }
             }
         }
@@ -43,12 +53,28 @@ export default class Api {
         if (!this.areRequiredFieldsFilled(formData, endpoint.name)) {
             return new ApiStatus('error', 400, 'Required fields are not present.');
         }
+
+        let searchUrlPart;
+        if (endpoint.method === 'GET') {
+            const possibleFields = [...endpoint.requiredFields, ...endpoint.optionalFields];
+            
+            let fields = [];
+            possibleFields.forEach(field => {
+                const fieldValue = formData.get(field);
+                
+                if (fieldValue !== null) {
+                    fields.push(`${field}=${fieldValue}`);
+                }
+            });
+
+            searchUrlPart = `?${fields.join('&')}`
+        }
     
         let resp;
         try {
             resp = await Axios({
                 method: endpoint.method,
-                url: this.state.baseUrl + endpoint.path,
+                url: this.state.baseUrl + endpoint.path + (endpoint.method === 'GET' ? searchUrlPart : ''),
                 data: formData
             });
         } catch {
@@ -69,6 +95,14 @@ export default class Api {
         formData.append('token', token);
         const status = await this.request('sendMessage', formData);
         status.data.timestamp *= 1000;
+        return status;
+    }
+    async getMessages(token, lastVerifiedId = -1) {
+        let formData = new FormData;
+        formData.append('token', token);
+        formData.append('last_verified_id', lastVerifiedId);
+
+        const status = await this.request('getMessages', formData);
         return status;
     }
 }
