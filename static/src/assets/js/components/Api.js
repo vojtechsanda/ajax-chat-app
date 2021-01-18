@@ -68,6 +68,7 @@ export default class Api {
     async sendMessage(formData, token) {
         formData.append('token', token);
         const status = await this.request('sendMessage', formData);
+        status.data.timestamp *= 1000;
         return status;
     }
 }
