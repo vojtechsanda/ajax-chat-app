@@ -2,7 +2,7 @@
 import '../sass/main.scss';
 
 import RegistrationController from './components/controllers/RegistrationController'
-import UserAuthentication from './components/UserAuthentication'
+import LoginController from './components/controllers/LoginController'
 import ChatController from './components/controllers/ChatController'
 import Redirector from './components/Redirector'
 
@@ -32,7 +32,7 @@ class App {
     }
     setupViews() {
         this.views.registration = new RegistrationController;
-        this.views.login = new UserAuthentication;
+        this.views.login = new LoginController;
         this.views.chat = new ChatController;
     }
     init() {
