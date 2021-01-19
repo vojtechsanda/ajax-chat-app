@@ -1,7 +1,7 @@
 //* SCSS
 import '../sass/main.scss';
 
-import Registration from './components/registration'
+import RegistrationController from './components/controllers/RegistrationController'
 import UserAuthentication from './components/UserAuthentication'
 import ChatController from './components/controllers/ChatController'
 import Redirector from './components/Redirector'
@@ -31,7 +31,7 @@ class App {
         }
     }
     setupViews() {
-        this.views.registration = new Registration;
+        this.views.registration = new RegistrationController;
         this.views.login = new UserAuthentication;
         this.views.chat = new ChatController;
     }
