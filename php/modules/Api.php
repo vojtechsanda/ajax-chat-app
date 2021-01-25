@@ -10,6 +10,38 @@ class Api {
     public function __construct() {
         $this->db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
     }
+    public function get_user($token, $user_id) {
+        $token = __html($token);
+        $user_id = __html($user_id);
+
+        $advanced_token = $this->verifyToken($token);
+
+        if (!$advanced_token) {
+            return (object) [
+                "status" => "error",
+                "statusCode" => 401,
+                "message" => "Invalid token"
+            ];
+        }
+
+        $user_id = intval($user_id);
+        
+        if ($user_id < 0) {
+            $user_id = $advanced_token->user_id;
+        }
+
+        $result = $this->db->select('SELECT `id`, `email` FROM `users` WHERE `id`=?', true, [$user_id]);
+        if (sizeof($result) === 0) {
+            $result = $this->db->select('SELECT `id`, `email` FROM `users` WHERE `id`=?', true, [$advanced_token->user_id]);
+        }
+        $result = $result[0];
+        
+        return (object) [
+            "status" => "success",
+            "message" => "User was provided",
+            "data" => $result
+        ];
+    }
     public function get_messages($token, $last_verified_id) {
         $token = __html($token);
         $last_verified_id = __html($last_verified_id);
@@ -31,9 +63,14 @@ class Api {
             $result = array_reverse($result);
         }
 
+        foreach ($result as $row) {
+            $row->id = intval($row->id);
+            $row->user_id = intval($row->user_id);
+        }
+
         return (object) [
             "status" => "success",
-            "message" => "User was created",
+            "message" => "Messages were provided",
             "data" => $result
         ];
     }

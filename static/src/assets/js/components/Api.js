@@ -34,6 +34,13 @@ export default class Api {
                     path: '/api/messages/',
                     requiredFields: ['token'],
                     optionalFields: ['last_verified_id']
+                },
+                getUser: {
+                    name: 'getUser',
+                    method: 'GET',
+                    path: '/api/user/',
+                    requiredFields: ['token'],
+                    optionalFields: ['id']
                 }
             }
         }
@@ -103,6 +110,14 @@ export default class Api {
         formData.append('last_verified_id', lastVerifiedId);
 
         const status = await this.request('getMessages', formData);
+        return status;
+    }
+    async getUser(token, id = -1) {
+        let formData = new FormData;
+        formData.append('token', token);
+        formData.append('user-id', id);
+
+        const status = await this.request('getUser', formData);
         return status;
     }
 }
