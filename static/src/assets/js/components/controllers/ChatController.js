@@ -1,4 +1,5 @@
 import Notify from '../Notify';
+import User from '../User'
 
 import * as chatView from '../views/chatView';
 import Chat from '../models/Chat';
@@ -8,6 +9,9 @@ export default class ChatController {
     constructor() {
         this.elements = {};
         this.intervals = {};
+        this.state = {
+            users: []
+        };
     }
 
     toggle() {
@@ -43,7 +47,7 @@ export default class ChatController {
         
         if (sentMessage) {
             chatView.clearInput();
-            chatView.renderMessage(sentMessage);
+            chatView.renderMessage(sentMessage, this.state.users);
             chatView.scrollChatDown();
         } else {
             new Notify('error', 'Message sending', 'Ups, something went wrong.');
@@ -81,10 +85,12 @@ export default class ChatController {
 
     syncMessages(from = 0) {
         chatView.removeMessages(from);
-        chat.getMessages(from).forEach(message => chatView.renderMessage(message));
+        chat.getMessages(from).forEach(message => chatView.renderMessage(message, this.state.users));
     }
 
     async init(show = false) {
+        this.state.users.push(await new User().create(-1, true));
+
         chatView.renderDash(show);
         this.setupElements();
         this.setupEvents();

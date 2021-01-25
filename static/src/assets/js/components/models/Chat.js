@@ -24,7 +24,7 @@ export default class Chat {
     async getNewMessages() {
         const token = localStorage.getItem('token');
         const resp = await api.getMessages(token, this.lastVerifiedMessageId);
-        
+
         if (resp.status === 'success') {
             return resp.data;
         }
