@@ -14,7 +14,7 @@ export const renderDash = (showDash = false) => {
                 <input type="password" name="password" placeholder="••••••••" id="user-authentication-password" class="dash__input" required>
             </div>
             <div class="dash__input-wrapper">
-                <input type="submit" value="Authenticate" class="dash__input dash__input--submit">
+                <input type="submit" value="Log in" class="dash__input dash__input--submit">
             </div>
         </div>
         <p class="dash__additional-note">Don't have an account?<br><a href="?registration" class="dash__link">Register here</a></p>
