@@ -50,7 +50,7 @@ export default class ChatController {
             chatView.renderMessage(sentMessage, this.state.users);
             chatView.scrollChatDown();
         } else {
-            new Notify('error', 'Message sending', 'Ups, something went wrong.');
+            new Notify('error', 'Message sending', 'Error occurred while sending your message.');
         }
     }
 
@@ -78,8 +78,7 @@ export default class ChatController {
                 }
             }
         } else {
-            new Notify('error', 'Downloading messages', 'Ups, something went wrong.');
-            console.error('Downloading messages: Ups, something went wrong.')
+            new Notify('error', 'Downloading messages', 'Error: Can\'t download new messages.');
         }
     }
 

@@ -20,11 +20,11 @@ export default class RegistrationController {
             const wasRegistered = await registration.register(e.target);
 
             if (wasRegistered) {
-                new Notify('success', 'Registration', 'You are successfully registered.');
+                new Notify('success', 'Registration', 'You were successfully registered.');
                 registrationView.clearInputs();
                 this.utilities.redirector.toLogin();
             } else {
-                new Notify('error', 'Registration', 'Ups, something went wrong.');
+                new Notify('error', 'Registration', 'Ups, something went wrong. Please try again later.');
             }
         })
     }

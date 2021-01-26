@@ -1,3 +1,6 @@
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.min.css';
+
 export default class Notify {
     constructor(status, heading, message) {
         this.state = {
@@ -9,7 +12,7 @@ export default class Notify {
         this.init();
     }
     render() {
-        alert(this.state.heading + ' ' + (this.state.status === 'error' ? 'Error: ' : (this.state.status === 'info' ? 'Info: ' : 'Success: ')) + this.state.message);
+        alertify.notify(this.state.message, this.state.status, 5);
     }
     init() {
         this.render();

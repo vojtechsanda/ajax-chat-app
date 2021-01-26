@@ -22,12 +22,12 @@ export default class LoginController {
             const isLogged = await login.login(e.target);
 
             if (isLogged) {
-                new Notify('success', 'Login', 'You are successfully logged in.');
+                new Notify('success', 'Login', 'You were successfully logged in.');
                 localStorage.setItem('token', isLogged.data.token);
                 loginView.clearInputs();
                 this.utilities.redirector.toChat();
             } else {
-                new Notify('error', 'Login', 'Ups, something went wrong.');
+                new Notify('error', 'Login', 'Wrong username or password');
             }
         })
     }

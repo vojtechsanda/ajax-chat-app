@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
+    "alertifyjs": "^1.13.1",
     "axios": "^0.21.0"
   }
 }
