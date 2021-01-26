@@ -42,7 +42,9 @@ export const renderMessage = (message, users) => {
 }
 
 export const scrollChatDown = () => {
-    elements.chatWrapper.scrollTo(0, elements.chatWrapper.scrollHeight);
+    setTimeout(() => {
+        elements.chatWrapper.scrollTo(0, elements.chatWrapper.scrollHeight);
+    }, 1)
 }
 
 export const toggle = () => {
