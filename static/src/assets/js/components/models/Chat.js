@@ -17,7 +17,7 @@ export default class Chat {
         if (resp.status === 'success') {
             return resp.data;
         }
-        
+
         return false;
     }
 
