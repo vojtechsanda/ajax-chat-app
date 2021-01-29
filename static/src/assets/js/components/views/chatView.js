@@ -35,8 +35,8 @@ export const renderMessage = (message, users) => {
     const messageDateTxt = `${messageDate.getDate()}.${messageDate.getMonth() + 1}.${messageDate.getFullYear()}`;
 
     const markup = `
-    <div class="chat__message chat__message${currentUser.getId() === message.user_id ? '--my' : ''} js-chat__message" data-message-id="${message.id}">
-        <span class="chat__message-header">User ${message.user_id} | ${messageTimeTxt} ${messageDateTxt}</span>
+    <div class="chat__message chat__message${currentUser.getId() === message.user.id ? '--my' : ''} js-chat__message" data-message-id="${message.id}">
+        <span class="chat__message-header"><span title="${message.user.username}">${message.user.short_username}</span>&nbsp;|&nbsp;${messageTimeTxt} ${messageDateTxt}</span>
         <span class="chat__message-txt">${message.message}</span>
     </div>
     `;
