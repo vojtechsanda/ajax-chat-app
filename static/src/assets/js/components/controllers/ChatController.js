@@ -36,6 +36,7 @@ export default class ChatController {
 
             this.sendMessage(e.target);
         })
+        chatView.getLogoutBtnElement().addEventListener('click', this.logout);
     }
 
     setupIntervals() {
@@ -100,6 +101,11 @@ export default class ChatController {
         if (newUser) {
             this.state.users.push(newUser);
         }
+    }
+
+    logout() {
+        localStorage.removeItem('token');
+        location.reload();
     }
     
     async init(show = false) {

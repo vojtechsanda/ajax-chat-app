@@ -3,6 +3,7 @@ import { elements } from './base';
 export const renderDash = (showDash = false) => {
     const markup = `
     <div class="dash dash--smaller${!showDash ? ' dash--hidden' : ''} js-chat-container">
+        <button class="chat__btn chat__btn--log-out js-chat__log-out-btn"><svg class="chat__icon"><use href="/assets/imgs/sprite.svg#icon-log-out"></use></svg></button>
         <h2 class="dash__heading">Chat</h2>
         <div class="dash__content-wrapper">
             <div class="chat__wrapper js-chat__wrapper">
@@ -10,7 +11,7 @@ export const renderDash = (showDash = false) => {
             </div>
             <form class="chat__send js-send-message-form" method="POST" action="#">
                 <input type="text" name="message" class="chat__send-input js-chat__send-input" placeholder="Type here..." autocomplete="off">
-                <button class="chat__send-btn"><svg class="chat__send-icon"><use href="/assets/imgs/sprite.svg#icon-send"></use></svg></button>
+                <button class="chat__btn chat__btn--send"><svg class="chat__icon"><use href="/assets/imgs/sprite.svg#icon-send"></use></svg></button>
             </form>
 
         </div>
@@ -22,6 +23,7 @@ export const renderDash = (showDash = false) => {
     elements.chatContainer = elements.mainWrapper.querySelector('.js-chat-container');
     elements.messageInput = elements.chatContainer.querySelector('.js-chat__send-input');
     elements.chatWrapper = elements.chatContainer.querySelector('.js-chat__wrapper');
+    elements.chatLogoutBtn = elements.chatContainer.querySelector('.js-chat__log-out-btn');
 }
 
 export const renderMessage = (message, users) => {
@@ -67,6 +69,10 @@ export const removeMessages = from => {
     const messageElems = Array.from(elements.chatWrapper.querySelectorAll('.js-chat__message'));
 
     messageElems.slice(from).forEach(elem => elem.parentElement.removeChild(elem));
+}
+
+export const getLogoutBtnElement = () => {
+    return elements.chatLogoutBtn;
 }
 
 function formatNumber2Digits(num) {
