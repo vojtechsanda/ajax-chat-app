@@ -24,6 +24,7 @@ export const renderDash = (showDash = false) => {
     elements.messageInput = elements.chatContainer.querySelector('.js-chat__send-input');
     elements.chatWrapper = elements.chatContainer.querySelector('.js-chat__wrapper');
     elements.chatLogoutBtn = elements.chatContainer.querySelector('.js-chat__log-out-btn');
+    elements.chatSendForm = elements.chatContainer.querySelector('.js-send-message-form');
 }
 
 export const renderMessage = (message, users) => {
@@ -69,6 +70,10 @@ export const removeMessages = from => {
     const messageElems = Array.from(elements.chatWrapper.querySelectorAll('.js-chat__message'));
 
     messageElems.slice(from).forEach(elem => elem.parentElement.removeChild(elem));
+}
+
+export const getSendFormElement = () => {
+    return elements.chatSendForm;
 }
 
 export const getLogoutBtnElement = () => {

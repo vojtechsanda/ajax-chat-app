@@ -3,5 +3,8 @@ export const elements = {
     chatContainer: null,
     messageInput: null,
     chatWrapper: null,
-    chatLogoutBtn: null
+    chatLogoutBtn: null,
+    chatSendForm: null,
+    registrationForm: null,
+    loginForm: null
 };

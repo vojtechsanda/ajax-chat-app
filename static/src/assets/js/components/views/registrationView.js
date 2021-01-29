@@ -25,6 +25,7 @@ export const renderDash = (showDash = false) => {
     
     elements.registrationForm = document.querySelector('.js-registration-form');
     elements.inputs = Array.from(elements.registrationForm.querySelectorAll('input:not([type="submit"])'));
+    elements.registrationForm = document.querySelector('.js-registration-form');
 }
 
 export const toggle = () => {
@@ -39,4 +40,8 @@ export const hide = () => {
 
 export const clearInputs = () => {
     elements.inputs.forEach(input => input.value = '');
+}
+
+export const getRegistrationFormElement = () => {
+    return elements.registrationForm;
 }

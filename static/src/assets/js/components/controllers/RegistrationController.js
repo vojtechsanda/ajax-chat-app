@@ -7,14 +7,10 @@ const registration = new Registration;
 
 export default class RegistrationController {
     constructor() {
-        this.elements = {};
         this.utilities = {};
     }
-    setupElements() {
-        this.elements.registrationForm = document.querySelector('.js-registration-form');
-    }
     setupEvents() {
-        this.elements.registrationForm.addEventListener('submit', async (e) => {
+        registrationView.getRegistrationFormElement().addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const wasRegistered = await registration.register(e.target);
@@ -44,7 +40,6 @@ export default class RegistrationController {
         this.utilities.redirector = new Redirector;
         
         registrationView.renderDash(show);
-        this.setupElements();
         this.setupEvents();
     }
 }

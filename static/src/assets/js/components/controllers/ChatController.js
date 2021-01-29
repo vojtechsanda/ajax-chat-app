@@ -7,7 +7,6 @@ const chat = new Chat;
 
 export default class ChatController {
     constructor() {
-        this.elements = {};
         this.intervals = {};
         this.state = {
             users: []
@@ -26,12 +25,8 @@ export default class ChatController {
         chatView.hide();
     }
 
-    setupElements() {
-        this.elements.chatContainer = document.querySelector('.js-chat-container');
-    }
-
     setupEvents() {
-        this.elements.chatContainer.addEventListener('submit', e => {
+        chatView.getSendFormElement().addEventListener('submit', e => {
             e.preventDefault();
 
             this.sendMessage(e.target);
@@ -112,7 +107,6 @@ export default class ChatController {
         this.createCurrentUser();
 
         chatView.renderDash(show);
-        this.setupElements();
         this.setupEvents();
         this.setupIntervals();
         

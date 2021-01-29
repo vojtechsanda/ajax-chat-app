@@ -7,16 +7,11 @@ const login = new Login;
 
 export default class LoginController {
     constructor() {
-        this.elements = {};
         this.utilities = {};
     }
 
-    setupElements() {
-        this.elements.loginForm = document.querySelector('.js-login-form');
-    }
-
     setupEvents() {
-        this.elements.loginForm.addEventListener('submit', async (e) => {
+        loginView.getLoginFormElement().addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const isLogged = await login.login(e.target);
@@ -48,7 +43,6 @@ export default class LoginController {
         this.utilities.redirector = new Redirector;
         
         loginView.renderDash(show);
-        this.setupElements();
         this.setupEvents();
     }
 }

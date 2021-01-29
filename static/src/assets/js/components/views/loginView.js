@@ -42,3 +42,7 @@ export const hide = () => {
 export const clearInputs = () => {
     elements.inputs.forEach(input => input.value = '');
 }
+
+export const getLoginFormElement = () => {
+    return elements.loginForm;
+}
