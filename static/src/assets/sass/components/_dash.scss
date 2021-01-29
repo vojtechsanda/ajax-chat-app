@@ -9,9 +9,23 @@
     max-width: 40rem;
     position: relative;
 
+    display: flex;
+    flex-direction: column;
+
+    @include responsive($breakpoint__mobile--mid) {
+        max-width: 100%;
+        margin: 0;
+        min-height: 100vh;
+    }
+
     &--smaller {
         padding: 4rem 3rem;
         max-width: 39rem;
+        
+        @include responsive($breakpoint__mobile--mid) {
+            max-width: 100%;
+            padding: 2rem;
+        }
     }
     &--hidden {
         display: none;
@@ -26,6 +40,10 @@
     }
     &__content-wrapper {
         margin-top: 25px;
+        flex: 1;
+
+        display: flex;
+        flex-direction: column;
     }
     &__input-wrapper {
         margin-top: 25px;
