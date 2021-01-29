@@ -57,15 +57,29 @@ class Api {
         }
 
         if ($last_verified_id > -1) {
-            $result = $this->db->select('SELECT * FROM `messages` WHERE `id` > ?', true, [$last_verified_id]);
+            $result = $this->db->select('SELECT `messages`.*, `users`.`email` AS `user_email` FROM `messages` JOIN `users` ON `messages`.`user_id` = `users`.`id` WHERE `messages`.`id` > ?', true, [$last_verified_id]);
         } else {
-            $result = $this->db->select('SELECT * FROM `messages` ORDER BY `id` DESC LIMIT 10');
+            $result = $this->db->select('SELECT `messages`.*, `users`.`email` AS `user_email` FROM `messages` JOIN `users` ON `messages`.`user_id` = `users`.`id` ORDER BY `messages`.`id` DESC LIMIT 10');
             $result = array_reverse($result);
         }
 
         foreach ($result as $row) {
+            $username = explode('@', $row->user_email)[0];
+
+            if (strlen($username) > 15) {
+                $short_username = substr($username, 0, 13) . '...';
+            } else {
+                $short_username = $username;
+            }
+
             $row->id = intval($row->id);
-            $row->user_id = intval($row->user_id);
+            $row->user = (object) [];
+            $row->user->id = intval($row->user_id);
+            $row->user->username = $username;
+            $row->user->short_username = $short_username;
+
+            unset($row->user_id);
+            unset($row->user_email);
         }
 
         return (object) [
