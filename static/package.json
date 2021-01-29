@@ -1,7 +1,7 @@
 {
   "name": "chat-app",
   "version": "1.0.0",
-  "description": "Chat widget app",
+  "description": "AJAX based chat app",
   "main": "main.js",
   "scripts": {
     "dev": "webpack --mode development",
