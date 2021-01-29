@@ -15,8 +15,14 @@ export default class User {
 
     async setInfo(id) {
         const userInfo = await this.fetchInfo(id);
+        if (userInfo.getStatus() === 'error') {
+            return false;
+        }
+
         this.id = userInfo.data.id;
         this.email = userInfo.data.email;
+
+        return true;
     }
 
     getId() {
@@ -29,8 +35,9 @@ export default class User {
     
     async create(id, currentUser) {
         this.currentUser = currentUser;
-        this.setInfo(id);
-
-        return this;
+        if (await this.setInfo(id)) {
+            return this;
+        }
+        return false;
     }
 }
