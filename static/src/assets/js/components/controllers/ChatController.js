@@ -55,9 +55,12 @@ export default class ChatController {
     }
 
     async handleNewMessages() {
+        if (!this.getCurrentUser()) {
+            await this.createCurrentUser();
+        }
         const newMessages = await chat.getNewMessages();
         
-        if (newMessages) {
+        if (newMessages && this.getCurrentUser()) {
             if (newMessages.length > 0) {
                 const lastVerifiedMessageId = chat.getLastVerifiedMessageId();
                 const newVerifiedMessageId = newMessages[newMessages.length - 1].id;
@@ -87,8 +90,20 @@ export default class ChatController {
         chat.getMessages(from).forEach(message => chatView.renderMessage(message, this.state.users));
     }
 
+    getCurrentUser() {
+        return this.state.users.find(user => user.currentUser);
+    }
+
+    async createCurrentUser() {
+        const newUser = await new User().create(-1, true);
+
+        if (newUser) {
+            this.state.users.push(newUser);
+        }
+    }
+    
     async init(show = false) {
-        this.state.users.push(await new User().create(-1, true));
+        this.createCurrentUser();
 
         chatView.renderDash(show);
         this.setupElements();
