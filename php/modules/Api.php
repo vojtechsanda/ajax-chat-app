@@ -32,9 +32,9 @@ class Api {
             $user_id = $advanced_token->user_id;
         }
 
-        $result = $this->db->select('SELECT `id`, `email` FROM `users` WHERE `id`=?', true, [$user_id]);
+        $result = $this->db->select('SELECT `id`, `email` FROM `'. DB_PREFIX .'users` WHERE `id`=?', true, [$user_id]);
         if (sizeof($result) === 0) {
-            $result = $this->db->select('SELECT `id`, `email` FROM `users` WHERE `id`=?', true, [$advanced_token->user_id]);
+            $result = $this->db->select('SELECT `id`, `email` FROM `'. DB_PREFIX .'users` WHERE `id`=?', true, [$advanced_token->user_id]);
         }
         $result = $result[0];
         
@@ -58,10 +58,13 @@ class Api {
             ];
         }
 
+        $users_table = DB_PREFIX . 'users';
+        $messages_table = DB_PREFIX . 'messages';
+
         if ($last_verified_id > -1) {
-            $result = $this->db->select('SELECT `messages`.*, `users`.`email` AS `user_email` FROM `messages` JOIN `users` ON `messages`.`user_id` = `users`.`id` WHERE `messages`.`id` > ?', true, [$last_verified_id]);
+            $result = $this->db->select('SELECT `'. $messages_table .'`.*, `'. $users_table .'`.`email` AS `user_email` FROM `'. $messages_table .'` JOIN `'. $users_table .'` ON `'. $messages_table .'`.`user_id` = `'. $users_table .'`.`id` WHERE `'. $messages_table .'`.`id` > ?', true, [$last_verified_id]);
         } else {
-            $result = $this->db->select('SELECT `messages`.*, `users`.`email` AS `user_email` FROM `messages` JOIN `users` ON `messages`.`user_id` = `users`.`id` ORDER BY `messages`.`id` DESC LIMIT 10');
+            $result = $this->db->select('SELECT `'. $messages_table .'`.*, `'. $users_table .'`.`email` AS `user_email` FROM `'. $messages_table .'` JOIN `'. $users_table .'` ON `'. $messages_table .'`.`user_id` = `'. $users_table .'`.`id` ORDER BY `'. $messages_table .'`.`id` DESC LIMIT 10');
             $result = array_reverse($result);
         }
 
@@ -105,7 +108,7 @@ class Api {
         }
 
         $current_timestamp = time();
-        $result = $this->db->insert('INSERT INTO `messages` (`user_id`, `message`, `timestamp`) VALUES (?, ?, ?)', true, [$advanced_token->user_id, $message, $current_timestamp]);
+        $result = $this->db->insert('INSERT INTO `'. DB_PREFIX .'messages` (`user_id`, `message`, `timestamp`) VALUES (?, ?, ?)', true, [$advanced_token->user_id, $message, $current_timestamp]);
 
         if (!$result) {
             return (object) [
@@ -140,7 +143,7 @@ class Api {
 
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        if (count($this->db->select('SELECT * FROM `users` WHERE `email`=?', true, [$email])) !== 0) {
+        if (count($this->db->select('SELECT * FROM `'. DB_PREFIX .'users` WHERE `email`=?', true, [$email])) !== 0) {
             return (object) [
                 "status" => "error",
                 "statusCode" => 500,
@@ -148,7 +151,7 @@ class Api {
             ];
         }
 
-        if (!($resp = $this->db->insert('INSERT INTO `users` (`email`, `password`) VALUES (?, ?)', true, [$email, $hashed_password]))) {
+        if (!($resp = $this->db->insert('INSERT INTO `'. DB_PREFIX .'users` (`email`, `password`) VALUES (?, ?)', true, [$email, $hashed_password]))) {
             return (object) [
                 "status" => "error",
                 "statusCode" => 500,
@@ -169,7 +172,7 @@ class Api {
         $email = __html($email);
         $password = __html($password);
 
-        if (!($user_credentials = $this->db->select('SELECT * FROM `users` WHERE `email`=?', true, [$email]))) {
+        if (!($user_credentials = $this->db->select('SELECT * FROM `'. DB_PREFIX .'users` WHERE `email`=?', true, [$email]))) {
             return (object) [
                 "status" => "error",
                 "statusCode" => 401,
@@ -195,7 +198,7 @@ class Api {
         $current_timestamp = $date->getTimestamp();
         $expire_timestamp = $current_timestamp + 604800;
 
-        if (!($resp = $this->db->insert('INSERT INTO `authentication_tokens` (`user_id`, `token`, `creation_timestamp`, `expire_timestamp`) VALUES (?, ?, ?, ?)', true, [$user_credentials->id, $token, $current_timestamp, $expire_timestamp]))) {
+        if (!($resp = $this->db->insert('INSERT INTO `'. DB_PREFIX .'authentication_tokens` (`user_id`, `token`, `creation_timestamp`, `expire_timestamp`) VALUES (?, ?, ?, ?)', true, [$user_credentials->id, $token, $current_timestamp, $expire_timestamp]))) {
             return (object) [
                 "status" => "error",
                 "statusCode" => 500,
@@ -224,7 +227,7 @@ class Api {
         return $token;
     }
     private function verifyToken($token) {
-        $advanced_tokens = $this->db->select('SELECT * FROM `authentication_tokens` WHERE `token` = ?', true, [$token]);
+        $advanced_tokens = $this->db->select('SELECT * FROM `'. DB_PREFIX .'authentication_tokens` WHERE `token` = ?', true, [$token]);
 
         if (count($advanced_tokens) === 0) {
             return false;
