@@ -25,6 +25,8 @@ class Api {
         }
 
         $user_id = intval($user_id);
+        //! TMP - Endpoint only returns info about the user that sent the request
+        $user_id = -1;
         
         if ($user_id < 0) {
             $user_id = $advanced_token->user_id;
