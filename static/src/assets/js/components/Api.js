@@ -109,7 +109,11 @@ export default class Api {
         formData.append('token', token);
         formData.append('last_verified_id', lastVerifiedId);
 
-        const status = await this.request('getMessages', formData);
+        let status = await this.request('getMessages', formData);
+        status.data = status.data.map(mess => {
+            mess.timestamp *= 1000
+            return mess;
+        });
         return status;
     }
     async getUser(token, id = -1) {
