@@ -1,6 +1,7 @@
 import Api from '../Api';
+import config from '../../config';
 
-const api = new Api('https://localhost/api/');
+const api = new Api(config.apiUrl);
 
 export default class Registration {
     constructor() {
