@@ -1,6 +1,6 @@
 import Api from './Api'
 
-const api = new Api('https://localhost');
+const api = new Api('https://localhost/api/');
 
 export default class User {
     constructor() {

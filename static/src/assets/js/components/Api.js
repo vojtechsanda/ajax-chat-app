@@ -10,35 +10,35 @@ export default class Api {
                 registration: {
                     name: 'registration',
                     method: 'POST',
-                    path: '/api/registration/',
+                    path: 'registration/',
                     requiredFields: ['email', 'password'],
                     optionalFields: []
                 },
                 userAuthentication: {
                     name: 'userAuthentication',
                     method: 'POST',
-                    path: '/api/user-authentication/',
+                    path: 'user-authentication/',
                     requiredFields: ['email', 'password'],
                     optionalFields: []
                 },
                 sendMessage: {
                     name: 'sendMessage',
                     method: 'POST',
-                    path: '/api/send-message/',
+                    path: 'send-message/',
                     requiredFields: ['message', 'token'],
                     optionalFields: []
                 },
                 getMessages: {
                     name: 'getMessages',
                     method: 'GET',
-                    path: '/api/messages/',
+                    path: 'messages/',
                     requiredFields: ['token'],
                     optionalFields: ['last_verified_id']
                 },
                 getUser: {
                     name: 'getUser',
                     method: 'GET',
-                    path: '/api/user/',
+                    path: 'user/',
                     requiredFields: ['token'],
                     optionalFields: ['id']
                 }
