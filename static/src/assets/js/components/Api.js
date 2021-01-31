@@ -57,6 +57,7 @@ export default class Api {
     }
 
     async request(endpointName, formData) {
+        const currentTimestamp = new Date().getTime();
         const endpoint = this.state.endpoints[endpointName];
         
         if (!this.areRequiredFieldsFilled(formData, endpoint.name)) {
@@ -75,6 +76,7 @@ export default class Api {
                     fields.push(`${field}=${fieldValue}`);
                 }
             });
+            fields.push(`t=${currentTimestamp}`);
 
             searchUrlPart = `?${fields.join('&')}`
         }
@@ -83,7 +85,7 @@ export default class Api {
         try {
             resp = await Axios({
                 method: endpoint.method,
-                url: this.state.baseUrl + endpoint.path + (endpoint.method === 'GET' ? searchUrlPart : ''),
+                url: this.state.baseUrl + endpoint.path + (endpoint.method === 'GET' ? searchUrlPart : `?t=${currentTimestamp}`),
                 data: formData
             });
         } catch {
