@@ -118,14 +118,29 @@ class Api {
             ];
         }
 
+
+        $db_user = $this->db->select('SELECT * FROM `'. DB_PREFIX .'users` WHERE `id`=?', true, [$advanced_token->user_id])[0];
+        $username = explode('@', $db_user->email)[0];
+
+        if (strlen($username) > 15) {
+            $short_username = substr($username, 0, 13) . '...';
+        } else {
+            $short_username = $username;
+        }
+
+        $user = (object) [];
+        $user->id = $advanced_token->user_id;
+        $user->username = $username;
+        $user->short_username = $short_username;
+
         return (object) [
             "status" => "success",
             "message" => "User was created",
             "data" => (object) [
                 "id" => $this->db->mysqli->insert_id,
-                "user_id" => $advanced_token->user_id,
                 "message" => $message,
-                "timestamp" => $current_timestamp
+                "timestamp" => $current_timestamp,
+                "user" => $user
             ]
         ];
     }
