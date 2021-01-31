@@ -1,5 +1,4 @@
 .chat {
-
     &__wrapper {
         width: 350px;
         max-width: 100%;
@@ -19,6 +18,7 @@
             max-height: calc(100vh - 183px);
         } 
     }
+
     &__message {
         text-align: left;
         width: max-content;
@@ -35,17 +35,21 @@
             align-self: flex-end;
         }
     }
+
     &__message-header {
         display: flex;
         font-size: 1rem;
         margin-bottom: 4px;
     }
+
     &__message--my &__message-header {
         justify-content: flex-end;
     }
+
     &__message-txt {
         font-size: 1.4rem;
     }
+
     &__send {
         display: flex;
         justify-content: space-between;
@@ -53,6 +57,7 @@
         position: relative;
         margin-top: 2rem;
     }
+
     &__send-input {
         background: #2A2A2A;
         border: none;
@@ -69,6 +74,7 @@
 	        font-size: 18px;
         }
     }
+
     &__btn {
         background: #2A2A2A;
         border: none;
@@ -88,15 +94,18 @@
             position: absolute;
             right: .8rem;
         }
+
         &--log-out {
             position: absolute;
             right: 1.2rem;
             top: 1.2rem;
         }
     }
+
     &__btn:active &__send-icon {
         fill: darken($color__green--light, 12.5);
     }
+
     &__icon {
         height: 2rem;
         width: 2rem;

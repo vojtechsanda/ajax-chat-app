@@ -45,6 +45,7 @@ export default class Api {
             }
         }
     }
+
     areRequiredFieldsFilled(formData, endpointName) {
         for (const reqField of this.state.endpoints[endpointName].requiredFields) {
             if (!formData.get(reqField)) {
@@ -54,6 +55,7 @@ export default class Api {
 
         return true;
     }
+
     async request(endpointName, formData) {
         const endpoint = this.state.endpoints[endpointName];
         
@@ -90,20 +92,26 @@ export default class Api {
     
         return new ApiStatus(Math.floor(resp.status / 100) === 2 ? 'success' : 'error', resp.status, resp.statusText, resp.data);
     }
+
     async register(formData) {
         const status = await this.request('registration', formData);
         return status;
     }
+
     async authenticateUser(formData) {
         const status = await this.request('userAuthentication', formData);
         return status;
     }
+
     async sendMessage(formData, token) {
         formData.append('token', token);
+
         const status = await this.request('sendMessage', formData);
         status.data.timestamp *= 1000;
+
         return status;
     }
+
     async getMessages(token, lastVerifiedId = -1) {
         let formData = new FormData;
         formData.append('token', token);
@@ -114,8 +122,10 @@ export default class Api {
             mess.timestamp *= 1000
             return mess;
         });
+
         return status;
     }
+
     async getUser(token, id = -1) {
         let formData = new FormData;
         formData.append('token', token);

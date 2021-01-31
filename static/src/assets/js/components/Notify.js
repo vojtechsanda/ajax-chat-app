@@ -11,9 +11,11 @@ export default class Notify {
 
         this.init();
     }
+
     render() {
         alertify.notify(this.state.message, this.state.status, 5);
     }
+
     init() {
         this.render();
     }

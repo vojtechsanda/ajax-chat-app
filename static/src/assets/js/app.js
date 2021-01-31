@@ -12,9 +12,11 @@ class App {
         this.views = {};
         this.utilities = {};
     }
+
     analyzeUser() {
         this.state.token = localStorage.getItem('token');
     }
+
     showView(view = 'auto') {
         if (view === 'auto') {
             const currentUrlSearch = location.search.slice(1);
@@ -30,11 +32,13 @@ class App {
             this.utilities.redirector.changeSearch(view);
         }
     }
+
     setupViews() {
         this.views.registration = new RegistrationController;
         this.views.login = new LoginController;
         this.views.chat = new ChatController;
     }
+
     init() {
         this.utilities.redirector = new Redirector;
 

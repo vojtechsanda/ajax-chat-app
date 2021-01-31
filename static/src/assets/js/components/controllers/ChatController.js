@@ -3,6 +3,7 @@ import User from '../User'
 
 import * as chatView from '../views/chatView';
 import Chat from '../models/Chat';
+
 const chat = new Chat;
 
 export default class ChatController {
@@ -54,6 +55,7 @@ export default class ChatController {
         if (!this.getCurrentUser()) {
             await this.createCurrentUser();
         }
+
         const newMessages = await chat.getNewMessages();
         
         if (newMessages && this.getCurrentUser()) {

@@ -3,6 +3,7 @@ import Redirector from '../Redirector'
 
 import * as loginView from '../views/loginView';
 import Login from '../models/Login';
+
 const login = new Login;
 
 export default class LoginController {

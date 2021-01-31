@@ -31,9 +31,11 @@ export const renderDash = (showDash = false) => {
 export const toggle = () => {
     elements.registrationForm.classList.toggle('dash--hidden');
 }
+
 export const show = () => {
     elements.registrationForm.classList.remove('dash--hidden');
 }
+
 export const hide = () => {
     elements.registrationForm.classList.add('dash--hidden');
 }

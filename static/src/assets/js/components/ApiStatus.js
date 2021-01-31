@@ -5,18 +5,23 @@ export default class ApiStatus {
         this.message = message;
         this.data = data;
     }
+
     getStatus() {
         return this.status;
     }
+
     getCode() {
         return this.code;
     }
+
     getMessage() {
         return this.message;
     }
+
     getData() {
         return this.data;
     }
+
     getAll() {
         return {
             status: this.getStatus(),

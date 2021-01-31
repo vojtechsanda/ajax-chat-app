@@ -1,5 +1,5 @@
-import Api from '../Api';
 import config from '../../config';
+import Api from '../Api';
 
 const api = new Api(config.apiUrl);
 
@@ -12,7 +12,7 @@ export default class Registration {
     async register(form) {
         var formData = new FormData(form);
 
-        let resp = await api.register(formData);
+        const resp = await api.register(formData);
 
         return resp.status === 'success';
     }

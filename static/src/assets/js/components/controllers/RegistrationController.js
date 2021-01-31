@@ -3,12 +3,14 @@ import Redirector from '../Redirector'
 
 import * as registrationView from '../views/registrationView';
 import Registration from '../models/Registration';
+
 const registration = new Registration;
 
 export default class RegistrationController {
     constructor() {
         this.utilities = {};
     }
+
     setupEvents() {
         registrationView.getRegistrationFormElement().addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -24,6 +26,7 @@ export default class RegistrationController {
             }
         })
     }
+
     toggle() {
         registrationView.toggle();
     }

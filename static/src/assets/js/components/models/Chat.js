@@ -1,5 +1,5 @@
-import Api from '../Api';
 import config from '../../config';
+import Api from '../Api';
 
 const api = new Api(config.apiUrl);
 
