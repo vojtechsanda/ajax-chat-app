@@ -231,6 +231,22 @@ class Api {
             ]
         ];
     }
+    public function logout($token) {
+        $token = __html($token);
+
+        if (!$this->db->delete('DELETE FROM `'. DB_PREFIX .'authentication_tokens` WHERE `token`=?', true, [$token])) {
+            return (object) [
+                "status" => "error",
+                "statusCode" => 500,
+                "message" => "User can't be logged out."
+            ];
+        }
+
+        return (object) [
+            "status" => "success",
+            "message" => "User was logged out."
+        ];
+    }
     private function generateToken($length) {
         $token = '';
         while (strlen($token) < $length) {
