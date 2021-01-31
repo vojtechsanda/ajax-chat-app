@@ -56,4 +56,12 @@ export default class Chat {
     getMessages(fromIndex = 0) {
         return this.messages.slice(fromIndex);
     }
+
+    async logout() {
+        const token = localStorage.getItem('token');
+        await api.logout(token);
+
+        localStorage.removeItem('token');
+        location.reload();
+    }
 }

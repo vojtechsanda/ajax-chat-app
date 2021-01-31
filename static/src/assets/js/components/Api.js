@@ -21,6 +21,13 @@ export default class Api {
                     requiredFields: ['email', 'password'],
                     optionalFields: []
                 },
+                logout: {
+                    name: 'logout',
+                    method: 'POST',
+                    path: 'logout/',
+                    requiredFields: ['token'],
+                    optionalFields: []
+                },
                 sendMessage: {
                     name: 'sendMessage',
                     method: 'POST',
@@ -102,6 +109,14 @@ export default class Api {
 
     async authenticateUser(formData) {
         const status = await this.request('userAuthentication', formData);
+        return status;
+    }
+
+    async logout(token) {
+        let formData = new FormData;
+        formData.append('token', token);
+
+        const status = await this.request('logout', formData);
         return status;
     }
 
