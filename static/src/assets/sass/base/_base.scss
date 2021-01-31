@@ -22,6 +22,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include responsive($breakpoint__mobile--mid) {
+        align-items: stretch;
+    }
 }
 
 ::-webkit-scrollbar {
