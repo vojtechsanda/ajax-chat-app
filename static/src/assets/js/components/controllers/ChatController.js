@@ -30,7 +30,9 @@ export default class ChatController {
         chatView.getSendFormElement().addEventListener('submit', e => {
             e.preventDefault();
 
-            this.sendMessage(e.target);
+            if (chatView.getMessageInput().value.length > 0) {
+                this.sendMessage(e.target);
+            }
         })
         chatView.getLogoutBtnElement().addEventListener('click', chat.logout);
     }

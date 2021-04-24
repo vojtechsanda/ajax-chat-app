@@ -76,6 +76,10 @@ export const getSendFormElement = () => {
     return elements.chatSendForm;
 }
 
+export const getMessageInput = () => {
+    return elements.messageInput;
+}
+
 export const getLogoutBtnElement = () => {
     return elements.chatLogoutBtn;
 }

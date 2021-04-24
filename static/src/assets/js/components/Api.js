@@ -95,8 +95,13 @@ export default class Api {
                 url: this.state.baseUrl + endpoint.path + (endpoint.method === 'GET' ? searchUrlPart : `?t=${currentTimestamp}`),
                 data: formData
             });
-        } catch {
-            return new ApiStatus('error', 500, 'Something went wrong.');
+        } catch(err) {
+            if (err.response.status === 401) {
+                await globalLogout(this);
+                return new ApiStatus('error', 401, 'Your connection has expired, you were logged out.');
+            } else {
+                return new ApiStatus('error', 500, 'Something went wrong.');
+            }
         }
     
         return new ApiStatus(Math.floor(resp.status / 100) === 2 ? 'success' : 'error', resp.status, resp.statusText, resp.data);
@@ -135,10 +140,12 @@ export default class Api {
         formData.append('last_verified_id', lastVerifiedId);
 
         let status = await this.request('getMessages', formData);
-        status.data = status.data.map(mess => {
-            mess.timestamp *= 1000
-            return mess;
-        });
+        if (status.getStatus() !== 'error') {
+            status.data = status.data.map(mess => {
+                mess.timestamp *= 1000
+                return mess;
+            });
+        }
 
         return status;
     }
@@ -151,4 +158,12 @@ export default class Api {
         const status = await this.request('getUser', formData);
         return status;
     }
+}
+
+async function globalLogout(api) {
+    const token = localStorage.getItem('token');
+    await api.logout(token);
+
+    localStorage.removeItem('token');
+    location.reload();
 }
