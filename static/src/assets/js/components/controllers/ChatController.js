@@ -10,7 +10,8 @@ export default class ChatController {
     constructor() {
         this.intervals = {};
         this.state = {
-            users: []
+            users: [],
+            lockSearchNext: false
         };
     }
 
@@ -27,6 +28,18 @@ export default class ChatController {
     }
 
     setupEvents() {
+        chatView.getChatWrapper().addEventListener('scroll', async e => {
+
+            if ((!this.state.lockSearchNext && e.target.scrollTop < 400)) {
+                this.state.lockSearchNext = true;
+                
+                //TODO: Load older messages
+
+                this.state.lockSearchNext = false;
+            }
+        })
+
+
         chatView.getSendFormElement().addEventListener('submit', e => {
             e.preventDefault();
 

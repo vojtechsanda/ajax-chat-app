@@ -84,6 +84,10 @@ export const getLogoutBtnElement = () => {
     return elements.chatLogoutBtn;
 }
 
+export const getChatWrapper = () => {
+    return elements.chatWrapper;
+}
+
 function formatNumber2Digits(num) {
     if (num >= 10) {
         return `${num}`;
