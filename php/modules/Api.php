@@ -258,7 +258,8 @@ class Api {
         return $token;
     }
     private function verifyToken($token) {
-        $advanced_tokens = $this->db->select('SELECT * FROM `'. DB_PREFIX .'authentication_tokens` WHERE `token` = ?', true, [$token]);
+        $current_timestamp = time();
+        $advanced_tokens = $this->db->select('SELECT * FROM `'. DB_PREFIX .'authentication_tokens` WHERE `token` = ? AND `expire_timestamp` > ?', true, [$token, $current_timestamp]);
 
         if (count($advanced_tokens) === 0) {
             return false;
