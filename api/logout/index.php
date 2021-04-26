@@ -13,7 +13,6 @@
             $resp = $api->logout($_POST['token']);
 
             if ($resp->status === 'success') {
-                echo json_encode($resp->data);
                 http_response_code(200);
             } else {
                 http_response_code($resp->statusCode);

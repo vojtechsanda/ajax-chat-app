@@ -40,6 +40,7 @@ class Api {
         
         return (object) [
             "status" => "success",
+            "statusCode" => 200,
             "message" => "User was provided",
             "data" => $result
         ];
@@ -95,6 +96,7 @@ class Api {
 
         return (object) [
             "status" => "success",
+            "statusCode" => 200,
             "message" => "Messages were provided",
             "data" => $result
         ];
@@ -141,6 +143,7 @@ class Api {
 
         return (object) [
             "status" => "success",
+            "statusCode" => 200,
             "message" => "User was created",
             "data" => (object) [
                 "id" => $this->db->mysqli->insert_id,
@@ -182,6 +185,7 @@ class Api {
 
         return (object) [
             "status" => "success",
+            "statusCode" => 200,
             "message" => "User was created",
             "data" => (object) [
                 "id" => $this->db->mysqli->insert_id,
@@ -229,6 +233,7 @@ class Api {
 
         return (object) [
             "status" => "success",
+            "statusCode" => 200,
             "message" => "Token was created",
             "data" => (object) [
                 "email" => $email,
@@ -250,7 +255,23 @@ class Api {
 
         return (object) [
             "status" => "success",
+            "statusCode" => 200,
             "message" => "User was logged out."
+        ];
+    }
+    public function clear_expired_tokens() {
+        if (!$this->db->delete('DELETE FROM `'. DB_PREFIX .'authentication_tokens` WHERE `expire_timestamp` < ?', true, [time()])) {
+            return (object) [
+                "status" => "error",
+                "statusCode" => 500,
+                "message" => "Auth tokens can't be cleared."
+            ];
+        }
+
+        return (object) [
+            "status" => "success",
+            "statusCode" => 200,
+            "message" => "Tokens were cleared.",
         ];
     }
     private function generateToken($length) {
