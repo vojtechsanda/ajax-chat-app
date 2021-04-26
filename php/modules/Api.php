@@ -265,6 +265,8 @@ class Api {
             return false;
         }
 
+        $this->db->update('UPDATE `chapp-authentication_tokens` SET `expire_timestamp`=? WHERE `id`=?', true, [time() + 604800, $advanced_tokens[0]->id]);
+
         return $advanced_tokens[0];
     }
 }
