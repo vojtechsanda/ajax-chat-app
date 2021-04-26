@@ -40,7 +40,7 @@ export default class Api {
                     method: 'GET',
                     path: 'messages/',
                     requiredFields: ['token'],
-                    optionalFields: ['last_verified_id']
+                    optionalFields: ['last_verified_id', 'are_old_messages']
                 },
                 getUser: {
                     name: 'getUser',
@@ -96,7 +96,7 @@ export default class Api {
                 data: formData
             });
         } catch(err) {
-            if (err.response.status === 401) {
+            if (err.response?.status === 401) {
                 await globalLogout(this);
                 return new ApiStatus('error', 401, 'Your connection has expired, you were logged out.');
             } else {
@@ -134,10 +134,11 @@ export default class Api {
         return status;
     }
 
-    async getMessages(token, lastVerifiedId = -1) {
+    async getMessages(token, lastVerifiedId = -1, areOldMessages = false) {
         let formData = new FormData;
         formData.append('token', token);
         formData.append('last_verified_id', lastVerifiedId);
+        formData.append('are_old_messages', areOldMessages);
 
         let status = await this.request('getMessages', formData);
         if (status.getStatus() !== 'error') {

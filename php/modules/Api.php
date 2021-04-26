@@ -44,9 +44,10 @@ class Api {
             "data" => $result
         ];
     }
-    public function get_messages($token, $last_verified_id) {
+    public function get_messages($token, $last_verified_id, $are_old_messages = false) {
         $token = __html($token);
         $last_verified_id = __html($last_verified_id);
+        $are_old_messages = __html($are_old_messages);
 
         $advanced_token = $this->verifyToken($token);
 
@@ -62,7 +63,12 @@ class Api {
         $messages_table = DB_PREFIX . 'messages';
 
         if ($last_verified_id > -1) {
-            $result = $this->db->select('SELECT `'. $messages_table .'`.*, `'. $users_table .'`.`email` AS `user_email` FROM `'. $messages_table .'` JOIN `'. $users_table .'` ON `'. $messages_table .'`.`user_id` = `'. $users_table .'`.`id` WHERE `'. $messages_table .'`.`id` > ?', true, [$last_verified_id]);
+            if ($are_old_messages) {
+                $result = $this->db->select('SELECT `'. $messages_table .'`.*, `'. $users_table .'`.`email` AS `user_email` FROM `'. $messages_table .'` JOIN `'. $users_table .'` ON `'. $messages_table .'`.`user_id` = `'. $users_table .'`.`id` WHERE `'. $messages_table .'`.`id` < ? ORDER BY `'. $messages_table .'`.`id` DESC LIMIT 10', true, [$last_verified_id]);
+                $result = array_reverse($result);
+            } else {
+                $result = $this->db->select('SELECT `'. $messages_table .'`.*, `'. $users_table .'`.`email` AS `user_email` FROM `'. $messages_table .'` JOIN `'. $users_table .'` ON `'. $messages_table .'`.`user_id` = `'. $users_table .'`.`id` WHERE `'. $messages_table .'`.`id` > ?', true, [$last_verified_id]);
+            }
         } else {
             $result = $this->db->select('SELECT `'. $messages_table .'`.*, `'. $users_table .'`.`email` AS `user_email` FROM `'. $messages_table .'` JOIN `'. $users_table .'` ON `'. $messages_table .'`.`user_id` = `'. $users_table .'`.`id` ORDER BY `'. $messages_table .'`.`id` DESC LIMIT 10');
             $result = array_reverse($result);

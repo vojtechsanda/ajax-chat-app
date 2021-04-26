@@ -16,8 +16,14 @@
             } else {
                 $last_verified_id = -1;
             }
-            
-            $resp = $api->get_messages($_GET['token'], $last_verified_id);
+
+            if (isset($_GET['are_old_messages'])) {
+                $are_old_messages = $_GET['are_old_messages'] === 'true' ? true : false;
+            } else {
+                $are_old_messages = false;
+            }
+
+            $resp = $api->get_messages($_GET['token'], $last_verified_id, $are_old_messages);
 
             if ($resp->status === 'success') {
                 echo json_encode($resp->data);

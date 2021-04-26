@@ -27,7 +27,7 @@ export const renderDash = (showDash = false) => {
     elements.chatSendForm = elements.chatContainer.querySelector('.js-send-message-form');
 }
 
-export const renderMessage = (message, users) => {
+export const renderMessage = (message, users, isOldMessage = false) => {
     const currentUser = getCurrentUser(users);
 
     const messageDate = new Date(message.timestamp);
@@ -41,7 +41,11 @@ export const renderMessage = (message, users) => {
     </div>
     `;
 
-    elements.chatWrapper.insertAdjacentHTML('beforeend', markup);
+    if (isOldMessage) {
+        elements.chatWrapper.insertAdjacentHTML('afterbegin', markup);
+    } else {
+        elements.chatWrapper.insertAdjacentHTML('beforeend', markup);
+    }
 }
 
 export const scrollChatDown = () => {

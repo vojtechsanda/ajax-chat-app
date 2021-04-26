@@ -11,7 +11,8 @@ export default class ChatController {
         this.intervals = {};
         this.state = {
             users: [],
-            lockSearchNext: false
+            lockSearchNext: false,
+            reachedOldestMessage: false
         };
     }
 
@@ -29,11 +30,15 @@ export default class ChatController {
 
     setupEvents() {
         chatView.getChatWrapper().addEventListener('scroll', async e => {
-
-            if ((!this.state.lockSearchNext && e.target.scrollTop < 400)) {
+            if (!this.state.lockSearchNext && e.target.scrollTop < 200 && !this.state.reachedOldestMessage) {
                 this.state.lockSearchNext = true;
                 
-                //TODO: Load older messages
+                const oldMessages = await chat.getOldMessages();
+                await this.handleNewMessages(oldMessages.getData(), true);
+
+                if (oldMessages.getData().length === 0) {
+                    this.state.reachedOldestMessage = true;
+                }
 
                 this.state.lockSearchNext = false;
             }
@@ -66,31 +71,38 @@ export default class ChatController {
         }
     }
 
-    async handleNewMessages() {
+    async handleNewMessages(messages = [], areOldMessages = false) {
         if (!this.getCurrentUser()) {
             await this.createCurrentUser();
         }
 
-        const newMessages = await chat.getNewMessages();
-        
-        if (newMessages && this.getCurrentUser()) {
-            if (newMessages.length > 0) {
-                const lastVerifiedMessageId = chat.getLastVerifiedMessageId();
-                const newVerifiedMessageId = newMessages[newMessages.length - 1].id;
-                
-                if (lastVerifiedMessageId !== newVerifiedMessageId) {
-                    const lastVerifiedIndex = chat.getLastVerifiedMessageIndex();
+        messages = messages.length === 0 ? await chat.getNewMessages() : messages;
 
-                    if (lastVerifiedIndex === -1) {
-                        chat.setMessages(newMessages);
-                    } else {
-                        chat.updateMessages(newMessages, lastVerifiedIndex);
+        if (messages && this.getCurrentUser()) {
+            if (messages.length > 0) {
+                if (areOldMessages) {
+                    chat.addOldMessages(messages);
+                    messages.reverse().forEach(message => {
+                        chatView.renderMessage(message, this.state.users, true);
+                    })
+                } else {
+                    const lastVerifiedMessageId = chat.getLastVerifiedMessageId();
+                    const newVerifiedMessageId = messages[messages.length - 1].id;
+                    
+                    if (lastVerifiedMessageId !== newVerifiedMessageId) {
+                        const lastVerifiedIndex = chat.getLastVerifiedMessageIndex();
+    
+                        if (lastVerifiedIndex === -1) {
+                            chat.setMessages(messages);
+                        } else {
+                            chat.updateMessages(messages, lastVerifiedIndex);
+                        }
+        
+                        this.syncMessages(lastVerifiedIndex === -1 ? 0 : lastVerifiedIndex);
+                        chatView.scrollChatDown();
+        
+                        chat.updateLastVerifiedMessageId(newVerifiedMessageId);
                     }
-    
-                    this.syncMessages(lastVerifiedIndex === -1 ? 0 : lastVerifiedIndex);
-                    chatView.scrollChatDown();
-    
-                    chat.updateLastVerifiedMessageId(newVerifiedMessageId);
                 }
             }
         } else {

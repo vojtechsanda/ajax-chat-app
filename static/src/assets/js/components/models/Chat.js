@@ -33,6 +33,12 @@ export default class Chat {
         return false;
     }
 
+    async getOldMessages() {
+        const token = localStorage.getItem('token');
+        const resp = await api.getMessages(token, this.messages[0].id, true);
+        return resp;
+    }
+
     getLastVerifiedMessageIndex() {
         return this.messages.findIndex(message => message.id === this.lastVerifiedMessageId)
     }
@@ -47,6 +53,10 @@ export default class Chat {
 
     setMessages(messages) {
         this.messages = messages;
+    }
+
+    addOldMessages(oldMessages) {
+        this.messages.unshift(...oldMessages);
     }
 
     updateMessages(newMessages, from) {
