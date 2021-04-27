@@ -3,12 +3,15 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/php/config.php';
 require_once ROOT_DIR . '/php/utilities/__html.php';
 require_once ROOT_DIR . '/php/modules/DB.php';
+require_once ROOT_DIR . '/php/modules/AntiSpam.php';
 
 class Api {
-    private $db;
+    private $db, $anti_spam;
     
     public function __construct() {
         $this->db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+        $this->anti_spam = new AntiSpam;
+
     }
     public function get_user($token, $user_id) {
         $token = __html($token);
@@ -112,6 +115,14 @@ class Api {
                 "status" => "error",
                 "statusCode" => 401,
                 "message" => "Invalid token"
+            ];
+        }
+
+        if (!$this->anti_spam->can_send_message($advanced_token->user_id)) {
+            return (object) [
+                "status" => "error",
+                "statusCode" => 429,
+                "message" => "Too many requests - anti spam"
             ];
         }
 

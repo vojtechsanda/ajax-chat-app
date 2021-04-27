@@ -19,7 +19,7 @@ export default class Chat {
 
             let resp = await api.sendMessage(formData, token);
     
-            if (resp.status === 'success') {
+            if (resp.getStatus() === 'success') {
                 return resp.data;
             }
         }
@@ -30,7 +30,7 @@ export default class Chat {
     canSendMessage() {
         // Cooldown
         const lastSecondsMessages = this.unverifiedMessagesTimestamps.filter(timestamp => timestamp > ((new Date).getTime() - 1000));
-        if (lastSecondsMessages.length > 5) {
+        if (lastSecondsMessages.length >= 5) {
             console.error("You can send just 5 messages per second.");
             return false;
         }
@@ -42,7 +42,7 @@ export default class Chat {
         const token = localStorage.getItem('token');
         const resp = await api.getMessages(token, this.lastVerifiedMessageId);
 
-        if (resp.status === 'success') {
+        if (resp.getStatus() === 'success') {
             return resp.data;
         }
 

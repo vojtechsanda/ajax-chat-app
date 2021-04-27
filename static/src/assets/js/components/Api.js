@@ -129,7 +129,10 @@ export default class Api {
         formData.append('token', token);
 
         const status = await this.request('sendMessage', formData);
-        status.data.timestamp *= 1000;
+
+        if (status.getStatus() === 'success') {
+            status.data.timestamp *= 1000;
+        }
 
         return status;
     }
