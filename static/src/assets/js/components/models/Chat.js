@@ -7,19 +7,35 @@ export default class Chat {
     constructor() {
         this.lastVerifiedMessageId = -1;
         this.messages = [];
+        this.unverifiedMessagesTimestamps = [];
     }
 
     async sendMessage(form) {
-        const formData = new FormData(form);
-        const token = localStorage.getItem('token');
+        if (this.canSendMessage()) {
+            const formData = new FormData(form);
+            const token = localStorage.getItem('token');
+    
+            this.unverifiedMessagesTimestamps.push((new Date).getTime());
 
-        let resp = await api.sendMessage(formData, token);
-
-        if (resp.status === 'success') {
-            return resp.data;
+            let resp = await api.sendMessage(formData, token);
+    
+            if (resp.status === 'success') {
+                return resp.data;
+            }
         }
 
         return false;
+    }
+
+    canSendMessage() {
+        // Cooldown
+        const lastSecondsMessages = this.unverifiedMessagesTimestamps.filter(timestamp => timestamp > ((new Date).getTime() - 1000));
+        if (lastSecondsMessages.length > 5) {
+            console.error("You can send just 5 messages per second.");
+            return false;
+        }
+
+        return true;
     }
 
     async getNewMessages() {
