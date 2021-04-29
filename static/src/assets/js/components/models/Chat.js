@@ -1,7 +1,9 @@
 import config from '../../config';
 import Api from '../Api';
+import AntiSpam from '../AntiSpam';
 
 const api = new Api(config.apiUrl);
+const antiSpam = new AntiSpam;
 
 export default class Chat {
     constructor() {
@@ -11,11 +13,11 @@ export default class Chat {
     }
 
     async sendMessage(form) {
-        if (this.canSendMessage()) {
+        if (antiSpam.canSendMessage()) {
             const formData = new FormData(form);
             const token = localStorage.getItem('token');
     
-            this.unverifiedMessagesTimestamps.push((new Date).getTime());
+            antiSpam.logMessage(formData);
 
             let resp = await api.sendMessage(formData, token);
     
@@ -25,17 +27,6 @@ export default class Chat {
         }
 
         return false;
-    }
-
-    canSendMessage() {
-        // Cooldown
-        const lastSecondsMessages = this.unverifiedMessagesTimestamps.filter(timestamp => timestamp > ((new Date).getTime() - 1000));
-        if (lastSecondsMessages.length >= 5) {
-            console.error("You can send just 5 messages per second.");
-            return false;
-        }
-
-        return true;
     }
 
     async getNewMessages() {
